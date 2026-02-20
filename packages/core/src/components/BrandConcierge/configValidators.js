@@ -10,10 +10,18 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 import { STREAM_START_TIMEOUT_MS } from "./constants.js";
-import { number, objectOf, boolean } from "../../utils/validation/index.js";
+import { EDGE as EDGE_DOMAIN } from "../../constants/domain.js";
+import {
+  number,
+  objectOf,
+  boolean,
+  string,
+} from "../../utils/validation/index.js";
 
 export default objectOf({
   conversation: objectOf({
+    edgeSubPath: string().nonEmpty().default("/brand-concierge"),
+    bcDomainName: string().nonEmpty().default(EDGE_DOMAIN),
     stickyConversationSession: boolean().default(false),
     streamTimeout: number()
       .integer()

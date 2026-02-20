@@ -93,4 +93,14 @@ describe("createConversationServiceRequest", () => {
 
     expect(request.getEdgeSubPath()).toBe("/brand-concierge");
   });
+
+  it("allows custom edge subpath", () => {
+    const request = createConversationServiceRequest({
+      payload: mockPayload,
+      sessionId: mockSessionId,
+      edgeSubPath: "/custom-brand-concierge",
+    });
+
+    expect(request.getEdgeSubPath()).toBe("/custom-brand-concierge");
+  });
 });

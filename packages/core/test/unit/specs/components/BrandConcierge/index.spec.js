@@ -128,14 +128,27 @@ describe("BrandConcierge config validators", () => {
   testConfigValidators({
     configValidators: createConciergeComponent.configValidators,
     validConfigurations: [
+      {conversation: { edgeSubPath: "/brand-concierge" }},
+      {conversation: { edgeSubPath: "/custom-brand-concierge" }},
+      {conversation: { bcDomainName: "edge.adobedc.net" }},
+      {conversation: { bcDomainName: "custom.edge.domain" }},
       {conversation: { stickyConversationSession: true }},
       {conversation: { stickyConversationSession: false }},
       {conversation: { streamTimeout: 10000 }},
       {conversation: { streamTimeout: 20000 }},
-      {conversation: { stickyConversationSession: true, streamTimeout: 10000 }},
+      {conversation: {
+        edgeSubPath: "/custom-brand-concierge",
+        bcDomainName: "custom.edge.domain",
+        stickyConversationSession: true,
+        streamTimeout: 10000
+      }},
       {}
     ],
     invalidConfigurations: [
+      {conversation: { edgeSubPath: "" }},
+      {conversation: { edgeSubPath: 123 }},
+      {conversation: { bcDomainName: "" }},
+      {conversation: { bcDomainName: 123 }},
       {conversation: { stickyConversationSession: "invalid" }},
       {conversation: { stickyConversationSession: 123 }},
       {conversation: { streamTimeout: "invalid" }},
@@ -145,7 +158,11 @@ describe("BrandConcierge config validators", () => {
     defaultValues: {}
   });
   it("provides default values for concierge configuration", () => {
-    const config = createConciergeComponent.configValidators({});
+    const config = createConciergeComponent.configValidators({
+      conversation: {},
+    });
+    expect(config.conversation.edgeSubPath).toBe("/brand-concierge");
+    expect(config.conversation.bcDomainName).toBe("edge.adobedc.net");
     expect(config.conversation.stickyConversationSession).toBe(false);
     expect(config.conversation.streamTimeout).toBe(10000);
   });

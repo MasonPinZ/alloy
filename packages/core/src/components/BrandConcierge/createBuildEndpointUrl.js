@@ -10,6 +10,10 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
+const isLocalhost = (domain) => {
+  return domain.includes("localhost") || domain.includes("127.0.0.1");
+};
+
 export default ({ queryString }) => {
   return ({ edgeDomain, request, datastreamId }) => {
     const params = request.getRequestParams();
@@ -18,6 +22,8 @@ export default ({ queryString }) => {
     params.configId = configId;
     const stringifiedRequestParams = queryString.stringify({ ...params });
 
-    return `https://${edgeDomain}${request.getEdgeSubPath()}/${request.getAction()}?${stringifiedRequestParams}`;
+    const protocol = isLocalhost(edgeDomain) ? "http" : "https";
+
+    return `${protocol}://${edgeDomain}${request.getEdgeSubPath()}/${request.getAction()}?${stringifiedRequestParams}`;
   };
 };

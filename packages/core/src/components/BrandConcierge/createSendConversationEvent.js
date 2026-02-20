@@ -36,6 +36,7 @@ export default ({
     onBeforeEventSend,
     conversation,
   } = config;
+  const { bcDomainName, edgeSubPath } = conversation;
 
   return (options) => {
     let streamingEnabled = false;
@@ -46,6 +47,7 @@ export default ({
     const request = createConversationServiceRequest({
       payload,
       sessionId: sessionId,
+      edgeSubPath,
     });
 
     const event = eventManager.createEvent();
@@ -84,8 +86,9 @@ export default ({
     if (message || data) {
       streamingEnabled = true;
     }
+    const domainName = bcDomainName || edgeDomain;
     const url = buildEndpointUrl({
-      edgeDomain,
+      edgeDomain: domainName,
       edgeBasePath,
       datastreamId,
       request,
